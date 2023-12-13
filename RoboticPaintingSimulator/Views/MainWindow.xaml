@@ -8,6 +8,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
         <views:ConfigurationView />
+        <views:StatisticsView Grid.Column="1" Margin="10 0 0 0" />
     </Grid>
 </Window>
