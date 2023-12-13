@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:RoboticPaintingSimulator.Views"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="500">
     <StackPanel Orientation="Horizontal" Margin="0 10">
         <Polygon Fill="{Binding RobotColor, RelativeSource={RelativeSource AncestorType={x:Type local:RobotConfigurationControl}}}"
                  Width="20" Height="20" Stroke="Black" StrokeThickness="1"
@@ -22,7 +22,7 @@
                 Width="20"
                 Command="{Binding DecrementCountCommand}"
                 Margin="2,0,0,0" />
-        <TextBlock Text=", processing time:" VerticalAlignment="Center" Margin="10,0,0,0" />
+        <TextBlock Text=", processing time:" VerticalAlignment="Center" Margin="10,0" />
         <TextBox Text="{Binding ProcessingTime}"
                  Width="50"
                  VerticalContentAlignment="Center" />

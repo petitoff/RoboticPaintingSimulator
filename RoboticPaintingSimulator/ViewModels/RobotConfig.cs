@@ -49,7 +49,7 @@ public class RobotConfig : INotifyPropertyChanged
         IncrementCountCommand = new RelayCommand(Increment);
         DecrementCountCommand = new RelayCommand(Decrement, CamDecrement);
         IncrementProcessingTimeCommand = new RelayCommand(IncrementProcessingTime);
-        DecrementProcessingTimeCommand = new RelayCommand(DecrementProcessingTime);
+        DecrementProcessingTimeCommand = new RelayCommand(DecrementProcessingTime, CanDecrementProcessingTime);
     }
 
     private void Increment(object? obj) => Count++;
@@ -62,6 +62,7 @@ public class RobotConfig : INotifyPropertyChanged
 
     private void IncrementProcessingTime(object? obj) => ProcessingTime++;
     private void DecrementProcessingTime(object? obj) => ProcessingTime--;
+    private bool CanDecrementProcessingTime(object? obj) => ProcessingTime > 0;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
