@@ -3,9 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:RoboticPaintingSimulator.Views"
+             xmlns:viewModels="clr-namespace:RoboticPaintingSimulator.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="500">
+    
+    <UserControl.DataContext>
+        <viewModels:RobotsViewModel />
+    </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
@@ -35,15 +39,36 @@
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Total processing time:" />
 
         <Polygon Grid.Row="0" Grid.Column="1" Fill="Red" Style="{StaticResource PolygonStyle}" />
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="0/5" />
+        <TextBlock Grid.Row="1" Grid.Column="1">
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{}{0}/{1}">
+                    <Binding Path="RedRobotUsed" />
+                    <Binding Path="RedRobotAssigned" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
         <TextBlock Grid.Row="2" Grid.Column="1" Text="20ms" />
 
         <Polygon Grid.Row="0" Grid.Column="2" Fill="Blue" Style="{StaticResource PolygonStyle}" />
-        <TextBlock Grid.Row="1" Grid.Column="2" Text="0/5" />
+        <TextBlock Grid.Row="1" Grid.Column="2">
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{}{0}/{1}">
+                    <Binding Path="BlueRobotUsed" />
+                    <Binding Path="BlueRobotAssigned" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
         <TextBlock Grid.Row="2" Grid.Column="2" Text="20ms" />
 
         <Polygon Grid.Row="0" Grid.Column="3" Fill="Green" Style="{StaticResource PolygonStyle}" />
-        <TextBlock Grid.Row="1" Grid.Column="3" Text="0/5" />
+        <TextBlock Grid.Row="1" Grid.Column="3">
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{}{0}/{1}">
+                    <Binding Path="GreenRobotUsed" />
+                    <Binding Path="GreenRobotAssigned" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
         <TextBlock Grid.Row="2" Grid.Column="3" Text="20ms" />
     </Grid>
 </UserControl>
