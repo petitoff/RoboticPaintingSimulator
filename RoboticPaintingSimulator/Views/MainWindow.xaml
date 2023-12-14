@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RoboticPaintingSimulator"
         xmlns:views="clr-namespace:RoboticPaintingSimulator.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="1000">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -14,9 +14,11 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <views:ConfigurationView />
-        <views:StatisticsView Grid.Column="1" Margin="10 0 0 0" />
+        <views:StatisticsView Grid.Row="0" Grid.Column="1" Margin="10 0 0 0" />
+        <views:RobotsView Grid.Row="1" Grid.Column="0"></views:RobotsView>
     </Grid>
 </Window>

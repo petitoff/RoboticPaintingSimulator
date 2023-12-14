@@ -4,9 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:RoboticPaintingSimulator.Views"
+             xmlns:viewModels="clr-namespace:RoboticPaintingSimulator.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-    <StackPanel Grid.Column="1" Grid.Row="0" Margin="10" Orientation="Vertical">
+    
+    <UserControl.DataContext>
+        <viewModels:StatisticsViewModel/>
+    </UserControl.DataContext>
+
+    <StackPanel Margin="10" Orientation="Vertical">
         <StackPanel.Resources>
             <Style TargetType="StackPanel">
                 <Setter Property="Orientation" Value="Horizontal" />
@@ -45,7 +51,7 @@
 
         <StackPanel>
             <TextBlock Text="Processed by Green:" />
-            <TextBlock Text="{Binding ProcessedByGreen}" Margin="5" />    
+            <TextBlock Text="{Binding ProcessedByGreen}" Margin="5" />
         </StackPanel>
 
     </StackPanel>

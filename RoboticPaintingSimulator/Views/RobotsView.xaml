@@ -5,8 +5,45 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:RoboticPaintingSimulator.Views"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="500">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80" />
+            <RowDefinition Height="40" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="140"  />
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="80" />
+        </Grid.ColumnDefinitions>
         
+        <Grid.Resources>
+            <Style x:Key="PolygonStyle" TargetType="Polygon">
+                <Setter Property="Width" Value="30"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Stroke" Value="Black"/>
+                <Setter Property="StrokeThickness" Value="1"/>
+                <Setter Property="Points" Value="10,0 20,20 0,20"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="5,0,0,0"/>
+            </Style>
+        </Grid.Resources>
+
+        <TextBlock Grid.Row="1" Text="Robots used:" />
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Total processing time:" />
+
+        <Polygon Grid.Row="0" Grid.Column="1" Fill="Red" Style="{StaticResource PolygonStyle}" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="0/5" />
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="20ms" />
+
+        <Polygon Grid.Row="0" Grid.Column="2" Fill="Blue" Style="{StaticResource PolygonStyle}" />
+        <TextBlock Grid.Row="1" Grid.Column="2" Text="0/5" />
+        <TextBlock Grid.Row="2" Grid.Column="2" Text="20ms" />
+
+        <Polygon Grid.Row="0" Grid.Column="3" Fill="Green" Style="{StaticResource PolygonStyle}" />
+        <TextBlock Grid.Row="1" Grid.Column="3" Text="0/5" />
+        <TextBlock Grid.Row="2" Grid.Column="3" Text="20ms" />
     </Grid>
 </UserControl>

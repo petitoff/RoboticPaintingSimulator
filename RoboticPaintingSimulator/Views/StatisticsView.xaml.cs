@@ -1,4 +1,5 @@
 using System.Windows.Controls;
+using RoboticPaintingSimulator.ViewModels;
 
 namespace RoboticPaintingSimulator.Views;
 
