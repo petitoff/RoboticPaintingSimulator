@@ -1,18 +1,26 @@
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Threading;
+using RoboticPaintingSimulator.Events;
 
 namespace RoboticPaintingSimulator.ViewModels;
 
 public class StatisticsViewModel : INotifyPropertyChanged
 {
-    private string _timeElapsed;
     private int _completed;
     private int _left;
-    private int _processedByRed;
     private int _processedByBlue;
     private int _processedByGreen;
+    private int _processedByRed;
+    private string _timeElapsed;
+    private DispatcherTimer _timer;
 
-    public event PropertyChangedEventHandler? PropertyChanged;
+    public StatisticsViewModel()
+    {
+        EventAggregator.Instance.Subscribe<PaintEvent>(StartTimer);
+        EventAggregator.Instance.Subscribe<PaintDoneEvent>(StopTimer);
+    }
 
     public string TimeElapsed
     {
@@ -72,6 +80,28 @@ public class StatisticsViewModel : INotifyPropertyChanged
             _processedByGreen = value;
             OnPropertyChanged();
         }
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void StartTimer(PaintEvent obj)
+    {
+        TimeElapsed = "00:00:00";
+
+        _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+        _timer.Tick += (sender, args) =>
+        {
+            var time = TimeSpan.Parse(TimeElapsed);
+            time = time.Add(TimeSpan.FromSeconds(1));
+            TimeElapsed = time.ToString("g");
+        };
+
+        _timer.Start();
+    }
+
+    private void StopTimer(PaintDoneEvent obj)
+    {
+        _timer?.Stop();
     }
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)

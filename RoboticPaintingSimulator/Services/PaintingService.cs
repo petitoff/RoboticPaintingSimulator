@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
+using RoboticPaintingSimulator.Events;
 using RoboticPaintingSimulator.Models;
 using RoboticPaintingSimulator.ViewModels;
 
@@ -36,7 +37,7 @@ public class PaintingService
     public PaintingService(ConfigurationViewModel config)
     {
         _config = config;
-        
+
         _config.RedRobotConfig.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == nameof(RobotConfig.Count))
@@ -49,27 +50,27 @@ public class PaintingService
                 _redDuration = TimeSpan.FromSeconds(_config.RedRobotConfig.ProcessingTime);
             }
         };
-        
+
         _config.BlueRobotConfig.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == nameof(RobotConfig.Count))
             {
                 _blueSemaphore = new SemaphoreSlim(_config.BlueRobotConfig.Count);
             }
-            
+
             if (args.PropertyName == nameof(RobotConfig.ProcessingTime))
             {
                 _blueDuration = TimeSpan.FromSeconds(_config.BlueRobotConfig.ProcessingTime);
             }
         };
-        
+
         _config.GreenRobotConfig.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == nameof(RobotConfig.Count))
             {
                 _greenSemaphore = new SemaphoreSlim(_config.GreenRobotConfig.Count);
             }
-            
+
             if (args.PropertyName == nameof(RobotConfig.ProcessingTime))
             {
                 _greenDuration = TimeSpan.FromSeconds(_config.GreenRobotConfig.ProcessingTime);
@@ -87,6 +88,8 @@ public class PaintingService
         }
 
         await Task.WhenAll(paintTasks);
+        
+        EventAggregator.Instance.Publish(new PaintDoneEvent());
     }
 
     private async Task PaintElementInAllColorsAsync(Element element)

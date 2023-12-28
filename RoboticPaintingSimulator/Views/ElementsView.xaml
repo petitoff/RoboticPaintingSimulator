@@ -18,7 +18,7 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Statistics" FontSize="25" FontWeight="Bold" />
+        <TextBlock Text="Elements" FontSize="25" FontWeight="Bold" />
 
         <DataGrid Grid.Row="1" ItemsSource="{Binding Elements}" AutoGenerateColumns="False">
             <DataGrid.Columns>
