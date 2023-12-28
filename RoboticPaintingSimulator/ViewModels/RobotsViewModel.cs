@@ -1,21 +1,59 @@
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using RoboticPaintingSimulator.Events;
+using RoboticPaintingSimulator.Services;
 
 namespace RoboticPaintingSimulator.ViewModels;
 
 public class RobotsViewModel : INotifyPropertyChanged
 {
-    private int _redRobotUsed;
-    private int _redRobotAssigned;
-    private int _blueRobotUsed;
+    private readonly PaintingService _paintingService;
     private int _blueRobotAssigned;
-    private int _greenRobotUsed;
+    private int _blueRobotUsed;
     private int _greenRobotAssigned;
-    
-    public event PropertyChangedEventHandler? PropertyChanged;
-    
+    private int _greenRobotUsed;
+    private int _redDuration;
+
+    private int _redRobotAssigned;
+    private int _redRobotUsed;
+
+    public RobotsViewModel(PaintingService paintingService, ConfigurationViewModel config)
+    {
+        _paintingService = paintingService;
+
+        config.RedRobotConfig.PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == nameof(RobotConfig.Count)) RedRobotAssigned = config.RedRobotConfig.Count;
+
+            if (args.PropertyName == nameof(RobotConfig.ProcessingTime))
+                RedDuration = config.RedRobotConfig.ProcessingTime;
+        };
+
+        config.BlueRobotConfig.PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == nameof(RobotConfig.Count)) BlueRobotAssigned = config.BlueRobotConfig.Count;
+        };
+
+        config.GreenRobotConfig.PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == nameof(RobotConfig.Count)) GreenRobotAssigned = config.GreenRobotConfig.Count;
+        };
+
+        UpdateRobotConfig();
+    }
+
+    public int RedDuration
+    {
+        get => _redDuration;
+        set
+        {
+            if (_redDuration != value)
+            {
+                _redDuration = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
     public int RedRobotUsed
     {
         get => _redRobotUsed;
@@ -28,7 +66,7 @@ public class RobotsViewModel : INotifyPropertyChanged
             }
         }
     }
-    
+
     public int RedRobotAssigned
     {
         get => _redRobotAssigned;
@@ -41,7 +79,7 @@ public class RobotsViewModel : INotifyPropertyChanged
             }
         }
     }
-    
+
     public int BlueRobotUsed
     {
         get => _blueRobotUsed;
@@ -54,7 +92,7 @@ public class RobotsViewModel : INotifyPropertyChanged
             }
         }
     }
-    
+
     public int BlueRobotAssigned
     {
         get => _blueRobotAssigned;
@@ -67,7 +105,7 @@ public class RobotsViewModel : INotifyPropertyChanged
             }
         }
     }
-    
+
     public int GreenRobotUsed
     {
         get => _greenRobotUsed;
@@ -80,7 +118,7 @@ public class RobotsViewModel : INotifyPropertyChanged
             }
         }
     }
-    
+
     public int GreenRobotAssigned
     {
         get => _greenRobotAssigned;
@@ -93,22 +131,14 @@ public class RobotsViewModel : INotifyPropertyChanged
             }
         }
     }
-    
-    public RobotsViewModel()
-    {
-        RedRobotUsed = 0;
-        RedRobotAssigned = 0;
-        BlueRobotUsed = 0;
-        BlueRobotAssigned = 0;
-        GreenRobotUsed = 0;
-        GreenRobotAssigned = 0;
-        
-        // eventAggregator.SubscribeRobotConfigChanged(UpdateRobotConfig);
-    }
 
-    private void UpdateRobotConfig(int obj)
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void UpdateRobotConfig()
     {
-        throw new System.NotImplementedException();
+        _paintingService.RedRobotCountChanged += count => RedRobotUsed = count;
+        _paintingService.BlueRobotCountChanged += count => BlueRobotUsed = count;
+        _paintingService.GreenRobotCountChanged += count => GreenRobotUsed = count;
     }
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)

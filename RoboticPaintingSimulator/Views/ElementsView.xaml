@@ -22,7 +22,7 @@
 
         <DataGrid Grid.Row="1" ItemsSource="{Binding Elements}" AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Element ID" Binding="{Binding ElementID}" />
+                <DataGridTextColumn Header="Element ID" Binding="{Binding Id}" />
                 <DataGridTemplateColumn Header="Red">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

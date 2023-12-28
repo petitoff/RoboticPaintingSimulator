@@ -1,6 +1,7 @@
 using Autofac;
 using RoboticPaintingSimulator.Converters;
 using RoboticPaintingSimulator.Events;
+using RoboticPaintingSimulator.Services;
 using RoboticPaintingSimulator.ViewModels;
 using RoboticPaintingSimulator.Views;
 
@@ -11,19 +12,21 @@ public class Bootstrapper
     public IContainer Bootstrap()
     {
         var builder = new ContainerBuilder();
+        
+        builder.RegisterType<PaintingService>().AsSelf().SingleInstance();
 
         builder.RegisterType<ElementsView>().AsSelf();
         builder.RegisterType<ElementsViewModel>().AsSelf();
 
         builder.RegisterType<ConfigurationView>().AsSelf();
-        builder.RegisterType<ConfigurationViewModel>().SingleInstance();
-
-        builder.RegisterType<MainWindow>().AsSelf();
-        builder.RegisterType<MainViewModel>().AsSelf();
+        builder.RegisterType<ConfigurationViewModel>().AsSelf().SingleInstance();
         
         builder.RegisterType<RobotsViewModel>().AsSelf();
         builder.RegisterType<RobotsView>().AsSelf();
 
+        builder.RegisterType<MainWindow>().AsSelf();
+        builder.RegisterType<MainViewModel>().AsSelf();
+        
         return builder.Build();
     }
 }

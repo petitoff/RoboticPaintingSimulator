@@ -11,11 +11,13 @@ namespace RoboticPaintingSimulator.ViewModels;
 public class ElementsViewModel : INotifyPropertyChanged
 {
     private readonly PaintingService _paintingService;
+    private readonly ConfigurationViewModel _configurationViewModel;
     private ObservableCollection<Element> _elements;
 
-    public ElementsViewModel()
+    public ElementsViewModel(PaintingService paintingService, ConfigurationViewModel configurationViewModel)
     {
-        _paintingService = new PaintingService();
+        _paintingService = paintingService;
+        _configurationViewModel = configurationViewModel;
         Elements = new ObservableCollection<Element>();
         EventAggregator.Instance.Subscribe<PaintEvent>(InitializeElements);
     }
@@ -34,7 +36,12 @@ public class ElementsViewModel : INotifyPropertyChanged
 
     private void InitializeElements(PaintEvent paintEvent)
     {
-        for (var i = 0; i < 3; i++) Elements.Add(new Element { Status = "Idle" });
+        Elements.Clear();
+        
+        for (var i = 0; i < _configurationViewModel.ElementCount; i++)
+        {
+            Elements.Add(new Element { Id=i, Status = "Idle" });
+        }
         StartPaintingProcess();
     }
 

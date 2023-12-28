@@ -14,19 +14,18 @@
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="80" />
         </Grid.RowDefinitions>
 
         <views:ConfigurationView DataContext="{Binding ConfigurationViewModel}" />
         <views:StatisticsView Grid.Row="0" Grid.Column="1" Margin="10 0 0 0" />
-        <views:RobotsView Grid.Row="1" Grid.Column="0" />
+        <!-- <views:RobotsView Grid.Row="1" Grid.Column="0" /> -->
+        <ContentControl Grid.Row="1" Grid.Column="0" Content="{Binding RobotsViewModel}" />
         <!-- <views:ElementsView Grid.Row="1" Grid.Column="1" Margin="10 0 0 0" /> -->
         <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding ElementsViewModel}" />
 
-
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0">
             <Button Command="{Binding PaintCommand}" Height="50">Start</Button>
-
         </StackPanel>
     </Grid>
 </Window>

@@ -13,5 +13,10 @@ namespace RoboticPaintingSimulator.Views
             InitializeComponent();
             DataContext = viewModel;
         }
+
+        public MainWindow()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

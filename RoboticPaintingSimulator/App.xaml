@@ -14,6 +14,9 @@
         <DataTemplate DataType="{x:Type viewModels:ElementsViewModel}">
             <views:ElementsView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:RobotsViewModel}">
+            <views:RobotsView />
+        </DataTemplate>
 
     </Application.Resources>
 </Application>
