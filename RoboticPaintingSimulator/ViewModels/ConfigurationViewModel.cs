@@ -8,11 +8,17 @@ namespace RoboticPaintingSimulator.ViewModels;
 public class ConfigurationViewModel : INotifyPropertyChanged
 {
     private int _elementCount;
-    
-    public RobotConfig RedRobotConfig { get; } = new RobotConfig();
-    public RobotConfig BlueRobotConfig { get; } = new RobotConfig();
-    public RobotConfig GreenRobotConfig { get; } = new RobotConfig();
-    
+
+    public ConfigurationViewModel()
+    {
+        IncrementElementCountCommand = new RelayCommand(_ => IncrementElementCount());
+        DecrementElementCountCommand = new RelayCommand(_ => DecrementElementCount());
+    }
+
+    public RobotConfig RedRobotConfig { get; } = new();
+    public RobotConfig BlueRobotConfig { get; } = new();
+    public RobotConfig GreenRobotConfig { get; } = new();
+
     public ICommand IncrementElementCountCommand { get; private set; }
     public ICommand DecrementElementCountCommand { get; private set; }
 
@@ -28,13 +34,8 @@ public class ConfigurationViewModel : INotifyPropertyChanged
             }
         }
     }
+
     public event PropertyChangedEventHandler? PropertyChanged;
-    
-    public ConfigurationViewModel()
-    {
-        IncrementElementCountCommand = new RelayCommand(_ => IncrementElementCount());
-        DecrementElementCountCommand = new RelayCommand(_ => DecrementElementCount());
-    }
 
     private void IncrementElementCount()
     {
@@ -47,7 +48,6 @@ public class ConfigurationViewModel : INotifyPropertyChanged
             ElementCount--;
     }
 
-    
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

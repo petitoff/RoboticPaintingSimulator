@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using RoboticPaintingSimulator.Events;
 
 namespace RoboticPaintingSimulator.ViewModels;
 
@@ -101,6 +102,13 @@ public class RobotsViewModel : INotifyPropertyChanged
         BlueRobotAssigned = 0;
         GreenRobotUsed = 0;
         GreenRobotAssigned = 0;
+        
+        // eventAggregator.SubscribeRobotConfigChanged(UpdateRobotConfig);
+    }
+
+    private void UpdateRobotConfig(int obj)
+    {
+        throw new System.NotImplementedException();
     }
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
