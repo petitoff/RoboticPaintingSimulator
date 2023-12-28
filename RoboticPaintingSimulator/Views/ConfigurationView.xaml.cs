@@ -8,6 +8,5 @@ public partial class ConfigurationView : UserControl
     public ConfigurationView()
     {
         InitializeComponent();
-        this.DataContext = new ConfigurationViewModel();
     }
 }

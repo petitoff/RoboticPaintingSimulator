@@ -7,9 +7,10 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="500">
     
-    <UserControl.DataContext>
-        <viewModels:RobotsViewModel />
-    </UserControl.DataContext>
+    <!-- <UserControl.DataContext> -->
+    <!--     <viewModels:RobotsViewModel /> -->
+    <!-- </UserControl.DataContext> -->
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
@@ -34,8 +35,9 @@
                 <Setter Property="Margin" Value="5,0,0,0"/>
             </Style>
         </Grid.Resources>
+        <TextBlock Text="Statistics" FontSize="25" FontWeight="Bold" />
 
-        <TextBlock Grid.Row="1" Text="Robots used:" />
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Robots used:" />
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Total processing time:" />
 
         <Polygon Grid.Row="0" Grid.Column="1" Fill="Red" Style="{StaticResource PolygonStyle}" />

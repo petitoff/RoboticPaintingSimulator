@@ -1,9 +1,8 @@
-﻿<Window x:Class="RoboticPaintingSimulator.MainWindow"
+﻿<Window x:Class="RoboticPaintingSimulator.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RoboticPaintingSimulator"
         xmlns:views="clr-namespace:RoboticPaintingSimulator.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="1000">
@@ -15,10 +14,19 @@
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
-        <views:ConfigurationView />
+        <views:ConfigurationView DataContext="{Binding ConfigurationViewModel}" />
         <views:StatisticsView Grid.Row="0" Grid.Column="1" Margin="10 0 0 0" />
-        <views:RobotsView Grid.Row="1" Grid.Column="0"></views:RobotsView>
+        <views:RobotsView Grid.Row="1" Grid.Column="0" />
+        <!-- <views:ElementsView Grid.Row="1" Grid.Column="1" Margin="10 0 0 0" /> -->
+        <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding ElementsViewModel}" />
+
+
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0">
+            <Button Command="{Binding PaintCommand}" Height="50">Start</Button>
+
+        </StackPanel>
     </Grid>
 </Window>
