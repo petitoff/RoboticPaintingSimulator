@@ -3,14 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:viewModels="clr-namespace:RoboticPaintingSimulator.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="500">
-    
+
     <!-- <UserControl.DataContext> -->
     <!--     <viewModels:RobotsViewModel /> -->
     <!-- </UserControl.DataContext> -->
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
@@ -18,21 +17,21 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="140"  />
+            <ColumnDefinition Width="140" />
             <ColumnDefinition Width="80" />
             <ColumnDefinition Width="80" />
             <ColumnDefinition Width="80" />
         </Grid.ColumnDefinitions>
-        
+
         <Grid.Resources>
             <Style x:Key="PolygonStyle" TargetType="Polygon">
-                <Setter Property="Width" Value="30"/>
-                <Setter Property="Height" Value="30"/>
-                <Setter Property="Stroke" Value="Black"/>
-                <Setter Property="StrokeThickness" Value="1"/>
-                <Setter Property="Points" Value="10,0 20,20 0,20"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-                <Setter Property="Margin" Value="5,0,0,0"/>
+                <Setter Property="Width" Value="30" />
+                <Setter Property="Height" Value="30" />
+                <Setter Property="Stroke" Value="Black" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="Points" Value="10,0 20,20 0,20" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Margin" Value="5,0,0,0" />
             </Style>
         </Grid.Resources>
         <TextBlock Text="Robots" FontSize="25" FontWeight="Bold" />
@@ -54,7 +53,7 @@
                 <MultiBinding StringFormat="{}{0} {1}">
                     <!-- Binding to the dynamic property -->
                     <Binding Path="RedDuration" />
-            
+
                     <!-- Static value -->
                     <Binding Source="s" />
                 </MultiBinding>
@@ -70,19 +69,17 @@
                 </MultiBinding>
             </TextBlock.Text>
         </TextBlock>
-        <!-- <TextBlock Grid.Row="2" Grid.Column="2" Text="20ms" /> -->
-        <!-- -->
-        <!-- <TextBlock Grid.Row="2" Grid.Column="2"> -->
-        <!--     <TextBlock.Text> -->
-        <!--         <MultiBinding StringFormat="{}{0} / {1}"> -->
-        <!--             ~1~ Binding to the dynamic property @1@ -->
-        <!--             <Binding Path="RedDuration" /> -->
-        <!--      -->
-        <!--             ~1~ Static value @1@ -->
-        <!--             <Binding Source="20ms" /> -->
-        <!--         </MultiBinding> -->
-        <!--     </TextBlock.Text> -->
-        <!-- </TextBlock> -->
+        <TextBlock Grid.Row="2" Grid.Column="2">
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{}{0} {1}">
+                    <!-- Binding to the dynamic property -->
+                    <Binding Path="BlueDuration" />
+
+                    <!-- Static value -->
+                    <Binding Source="s" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
 
 
         <Polygon Grid.Row="0" Grid.Column="3" Fill="Green" Style="{StaticResource PolygonStyle}" />
@@ -94,6 +91,16 @@
                 </MultiBinding>
             </TextBlock.Text>
         </TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="3" Text="20ms" />
+        <TextBlock Grid.Row="2" Grid.Column="3">
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{}{0} {1}">
+                    <!-- Binding to the dynamic property -->
+                    <Binding Path="GreenDuration" />
+
+                    <!-- Static value -->
+                    <Binding Source="s" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
     </Grid>
 </UserControl>
