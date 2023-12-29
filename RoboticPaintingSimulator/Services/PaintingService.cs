@@ -30,7 +30,14 @@ public class PaintingService
     public event Action<int> RedRobotCountChanged;
     public event Action<int> BlueRobotCountChanged;
     public event Action<int> GreenRobotCountChanged;
+    
+    // Count the number of elements that are currently being painted
+    private int _currentlyPaintingElements;
 
+    //Count the number of painted elements for each color
+    public int RedPaintedElements;
+    public int BluePaintedElements;
+    public int GreenPaintedElements;
 
     private readonly ConfigurationViewModel _config;
 
@@ -125,12 +132,15 @@ public class PaintingService
             {
                 case "Red":
                     element.IsRedPainted = true;
+                    RedPaintedElements++;
                     break;
                 case "Blue":
                     element.IsBluePainted = true;
+                    BluePaintedElements++;
                     break;
                 case "Green":
                     element.IsGreenPainted = true;
+                    GreenPaintedElements++;
                     break;
             }
         }

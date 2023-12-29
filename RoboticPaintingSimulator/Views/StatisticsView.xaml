@@ -7,10 +7,6 @@
              xmlns:viewModels="clr-namespace:RoboticPaintingSimulator.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-    
-    <UserControl.DataContext>
-        <viewModels:StatisticsViewModel/>
-    </UserControl.DataContext>
 
     <StackPanel Margin="10" Orientation="Vertical">
         <StackPanel.Resources>

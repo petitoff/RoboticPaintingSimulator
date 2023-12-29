@@ -23,6 +23,9 @@ public class Bootstrapper
         
         builder.RegisterType<RobotsViewModel>().AsSelf();
         builder.RegisterType<RobotsView>().AsSelf();
+        
+        builder.RegisterType<StatisticsViewModel>().AsSelf();
+        builder.RegisterType<StatisticsView>().AsSelf();
 
         builder.RegisterType<MainWindow>().AsSelf();
         builder.RegisterType<MainViewModel>().AsSelf();

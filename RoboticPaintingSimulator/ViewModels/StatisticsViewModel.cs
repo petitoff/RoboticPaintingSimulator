@@ -3,11 +3,13 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Threading;
 using RoboticPaintingSimulator.Events;
+using RoboticPaintingSimulator.Services;
 
 namespace RoboticPaintingSimulator.ViewModels;
 
 public class StatisticsViewModel : INotifyPropertyChanged
 {
+    private readonly PaintingService _paintingService;
     private int _completed;
     private int _left;
     private int _processedByBlue;
@@ -16,8 +18,14 @@ public class StatisticsViewModel : INotifyPropertyChanged
     private string _timeElapsed;
     private DispatcherTimer _timer;
 
-    public StatisticsViewModel()
+    public StatisticsViewModel(PaintingService paintingService)
     {
+        _paintingService = paintingService;
+
+        _paintingService.RedRobotCountChanged += count => ProcessedByRed += count;
+        _paintingService.BlueRobotCountChanged += count => ProcessedByBlue += count;
+        _paintingService.GreenRobotCountChanged += count => ProcessedByGreen += count;
+        
         EventAggregator.Instance.Subscribe<PaintEvent>(StartTimer);
         EventAggregator.Instance.Subscribe<PaintDoneEvent>(StopTimer);
     }
