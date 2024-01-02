@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
@@ -12,34 +11,32 @@ namespace RoboticPaintingSimulator.Services;
 
 public class PaintingService
 {
-    // Define semaphores for each color with different maximum concurrent tasks
-    private SemaphoreSlim _redSemaphore = new(3);
+    private readonly ConfigurationViewModel _config;
+
+    private readonly object _lock = new();
+    private TimeSpan _blueDuration = TimeSpan.FromSeconds(7);
     private SemaphoreSlim _blueSemaphore = new(2);
+    private int _currentlyPaintingBlue;
+
+    // Count the number of elements that are currently being painted
+    private int _currentlyPaintingElements;
+    private int _currentlyPaintingGreen;
+
+    // Counters for currently painting robots
+    private int _currentlyPaintingRed;
+    private TimeSpan _greenDuration = TimeSpan.FromSeconds(6);
     private SemaphoreSlim _greenSemaphore = new(5);
 
     // Define different durations for each color
     private TimeSpan _redDuration = TimeSpan.FromSeconds(5);
-    private TimeSpan _blueDuration = TimeSpan.FromSeconds(7);
-    private TimeSpan _greenDuration = TimeSpan.FromSeconds(6);
 
-    // Counters for currently painting robots
-    private int _currentlyPaintingRed;
-    private int _currentlyPaintingBlue;
-    private int _currentlyPaintingGreen;
-
-    public event Action<int> RedRobotCountChanged;
-    public event Action<int> BlueRobotCountChanged;
-    public event Action<int> GreenRobotCountChanged;
-    
-    // Count the number of elements that are currently being painted
-    private int _currentlyPaintingElements;
-
-    //Count the number of painted elements for each color
-    public int RedPaintedElements;
+    // Define semaphores for each color with different maximum concurrent tasks
+    private SemaphoreSlim _redSemaphore = new(3);
     public int BluePaintedElements;
     public int GreenPaintedElements;
 
-    private readonly ConfigurationViewModel _config;
+    //Count the number of painted elements for each color
+    public int RedPaintedElements;
 
     public PaintingService(ConfigurationViewModel config)
     {
@@ -48,54 +45,47 @@ public class PaintingService
         _config.RedRobotConfig.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == nameof(RobotConfig.Count))
-            {
                 _redSemaphore = new SemaphoreSlim(_config.RedRobotConfig.Count);
-            }
 
             if (args.PropertyName == nameof(RobotConfig.ProcessingTime))
-            {
                 _redDuration = TimeSpan.FromSeconds(_config.RedRobotConfig.ProcessingTime);
-            }
         };
 
         _config.BlueRobotConfig.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == nameof(RobotConfig.Count))
-            {
                 _blueSemaphore = new SemaphoreSlim(_config.BlueRobotConfig.Count);
-            }
 
             if (args.PropertyName == nameof(RobotConfig.ProcessingTime))
-            {
                 _blueDuration = TimeSpan.FromSeconds(_config.BlueRobotConfig.ProcessingTime);
-            }
         };
 
         _config.GreenRobotConfig.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == nameof(RobotConfig.Count))
-            {
                 _greenSemaphore = new SemaphoreSlim(_config.GreenRobotConfig.Count);
-            }
 
             if (args.PropertyName == nameof(RobotConfig.ProcessingTime))
-            {
                 _greenDuration = TimeSpan.FromSeconds(_config.GreenRobotConfig.ProcessingTime);
-            }
         };
     }
+
+    public int CompletedElementsCount { get; private set; }
+
+    public event Action<int> CompletedElementsCountChanged;
+
+    public event Action<int> RedRobotCountChanged;
+    public event Action<int> BlueRobotCountChanged;
+    public event Action<int> GreenRobotCountChanged;
 
     public async Task PaintAllElementsAsync(ObservableCollection<Element> elements)
     {
         var paintTasks = new List<Task>();
 
-        foreach (var element in elements)
-        {
-            paintTasks.Add(PaintElementInAllColorsAsync(element));
-        }
+        foreach (var element in elements) paintTasks.Add(PaintElementInAllColorsAsync(element));
 
         await Task.WhenAll(paintTasks);
-        
+
         EventAggregator.Instance.Publish(new PaintDoneEvent());
     }
 
@@ -112,6 +102,14 @@ public class PaintingService
 
         // Update status to Finished after all colors are painted
         element.Status = "Finished";
+
+        // Sprawdź, czy element został pomalowany we wszystkich kolorach
+        if (element.IsRedPainted && element.IsBluePainted && element.IsGreenPainted)
+            lock (_lock)
+            {
+                CompletedElementsCount++;
+                CompletedElementsCountChanged?.Invoke(CompletedElementsCount);
+            }
     }
 
     private async Task PaintElementAsync(Element element, string color, SemaphoreSlim semaphore, TimeSpan duration)
