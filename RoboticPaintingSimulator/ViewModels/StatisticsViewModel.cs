@@ -18,7 +18,7 @@ public class StatisticsViewModel : INotifyPropertyChanged
     private string _timeElapsed;
     private DispatcherTimer _timer;
 
-    public StatisticsViewModel(PaintingService paintingService)
+    public StatisticsViewModel(PaintingService paintingService, ConfigurationViewModel config)
     {
         _paintingService = paintingService;
 
@@ -27,6 +27,7 @@ public class StatisticsViewModel : INotifyPropertyChanged
         _paintingService.GreenRobotCountChanged += count => ProcessedByGreen += count;
 
         _paintingService.CompletedElementsCountChanged += count => Completed = count;
+        _paintingService.CompletedElementsCountChanged += count => Left = config.ElementCount - count;
         
         EventAggregator.Instance.Subscribe<PaintEvent>(StartTimer);
         EventAggregator.Instance.Subscribe<PaintDoneEvent>(StopTimer);
