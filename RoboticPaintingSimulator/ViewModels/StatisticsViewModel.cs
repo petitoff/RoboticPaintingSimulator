@@ -22,13 +22,17 @@ public class StatisticsViewModel : INotifyPropertyChanged
     {
         _paintingService = paintingService;
 
-        _paintingService.RedRobotCountChanged += count => ProcessedByRed += count;
-        _paintingService.BlueRobotCountChanged += count => ProcessedByBlue += count;
-        _paintingService.GreenRobotCountChanged += count => ProcessedByGreen += count;
+        ProcessedByRed = 0;
+        ProcessedByBlue = 0;
+        ProcessedByGreen = 0;
+
+        _paintingService.RedToBePaintedChanged += count => ProcessedByRed = count;
+        _paintingService.BlueToBePaintedChanged += count => ProcessedByBlue = count;
+        _paintingService.GreenToBePaintedChanged += count => ProcessedByGreen = count;
 
         _paintingService.CompletedElementsCountChanged += count => Completed = count;
         _paintingService.CompletedElementsCountChanged += count => Left = config.ElementCount - count;
-        
+
         EventAggregator.Instance.Subscribe<PaintEvent>(StartTimer);
         EventAggregator.Instance.Subscribe<PaintDoneEvent>(StopTimer);
     }
