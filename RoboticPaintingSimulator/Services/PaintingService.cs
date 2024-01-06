@@ -32,11 +32,15 @@ public class PaintingService
 
     // Define semaphores for each color with different maximum concurrent tasks
     private SemaphoreSlim _redSemaphore = new(3);
-    public int BluePaintedElements;
-    public int GreenPaintedElements;
 
     //Count the number of painted elements for each color
-    public int RedPaintedElements;
+    public int RedToBePaintedElements;
+    public int BlueToBePaintedElements;
+    public int GreenToBePaintedElements;
+    
+    public event Action<int> RedToBePaintedChanged;
+    public event Action<int> BlueToBePaintedChanged;
+    public event Action<int> GreenToBePaintedChanged;
 
     public PaintingService(ConfigurationViewModel config)
     {
@@ -80,6 +84,10 @@ public class PaintingService
 
     public async Task PaintAllElementsAsync(ObservableCollection<Element> elements)
     {
+        RedToBePaintedElements = elements.Count;
+        BlueToBePaintedElements = elements.Count;
+        GreenToBePaintedElements = elements.Count;
+
         var paintTasks = new List<Task>();
 
         foreach (var element in elements) paintTasks.Add(PaintElementInAllColorsAsync(element));
@@ -130,15 +138,18 @@ public class PaintingService
             {
                 case "Red":
                     element.IsRedPainted = true;
-                    RedPaintedElements++;
+                    RedToBePaintedElements--;
+                    RedToBePaintedChanged?.Invoke(RedToBePaintedElements);
                     break;
                 case "Blue":
                     element.IsBluePainted = true;
-                    BluePaintedElements++;
+                    BlueToBePaintedElements--;
+                    BlueToBePaintedChanged?.Invoke(BlueToBePaintedElements);
                     break;
                 case "Green":
                     element.IsGreenPainted = true;
-                    GreenPaintedElements++;
+                    GreenToBePaintedElements--;
+                    GreenToBePaintedChanged?.Invoke(GreenToBePaintedElements);
                     break;
             }
         }
