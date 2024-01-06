@@ -11,8 +11,6 @@ namespace RoboticPaintingSimulator.Services;
 
 public class PaintingService
 {
-    private readonly ConfigurationViewModel _config;
-
     private readonly object _lock = new();
     private TimeSpan _blueDuration = TimeSpan.FromSeconds(7);
     private SemaphoreSlim _blueSemaphore = new(2);
@@ -33,48 +31,48 @@ public class PaintingService
     // Define semaphores for each color with different maximum concurrent tasks
     private SemaphoreSlim _redSemaphore = new(3);
 
-    //Count the number of painted elements for each color
-    public int RedToBePaintedElements;
-    public int BlueToBePaintedElements;
-    public int GreenToBePaintedElements;
-    
-    public event Action<int> RedToBePaintedChanged;
-    public event Action<int> BlueToBePaintedChanged;
-    public event Action<int> GreenToBePaintedChanged;
-
     public PaintingService(ConfigurationViewModel config)
     {
-        _config = config;
-
-        _config.RedRobotConfig.PropertyChanged += (sender, args) =>
+        config.RedRobotConfig.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == nameof(RobotConfig.Count))
-                _redSemaphore = new SemaphoreSlim(_config.RedRobotConfig.Count);
+                _redSemaphore = new SemaphoreSlim(config.RedRobotConfig.Count);
 
             if (args.PropertyName == nameof(RobotConfig.ProcessingTime))
-                _redDuration = TimeSpan.FromSeconds(_config.RedRobotConfig.ProcessingTime);
+                _redDuration = TimeSpan.FromSeconds(config.RedRobotConfig.ProcessingTime);
         };
 
-        _config.BlueRobotConfig.PropertyChanged += (sender, args) =>
+        config.BlueRobotConfig.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == nameof(RobotConfig.Count))
-                _blueSemaphore = new SemaphoreSlim(_config.BlueRobotConfig.Count);
+                _blueSemaphore = new SemaphoreSlim(config.BlueRobotConfig.Count);
 
             if (args.PropertyName == nameof(RobotConfig.ProcessingTime))
-                _blueDuration = TimeSpan.FromSeconds(_config.BlueRobotConfig.ProcessingTime);
+                _blueDuration = TimeSpan.FromSeconds(config.BlueRobotConfig.ProcessingTime);
         };
 
-        _config.GreenRobotConfig.PropertyChanged += (sender, args) =>
+        config.GreenRobotConfig.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == nameof(RobotConfig.Count))
-                _greenSemaphore = new SemaphoreSlim(_config.GreenRobotConfig.Count);
+                _greenSemaphore = new SemaphoreSlim(config.GreenRobotConfig.Count);
 
             if (args.PropertyName == nameof(RobotConfig.ProcessingTime))
-                _greenDuration = TimeSpan.FromSeconds(_config.GreenRobotConfig.ProcessingTime);
+                _greenDuration = TimeSpan.FromSeconds(config.GreenRobotConfig.ProcessingTime);
         };
     }
 
+    // Count the number of elements that are currently being painted
     public int CompletedElementsCount { get; private set; }
+
+    public int GreenPaintedElements { get; set; }
+
+    public int BluePaintedElements { get; set; }
+
+    public int RedPaintedElements { get; set; }
+
+    public event Action<int> RedToBePaintedChanged;
+    public event Action<int> BlueToBePaintedChanged;
+    public event Action<int> GreenToBePaintedChanged;
 
     public event Action<int> CompletedElementsCountChanged;
 
@@ -84,10 +82,6 @@ public class PaintingService
 
     public async Task PaintAllElementsAsync(ObservableCollection<Element> elements)
     {
-        RedToBePaintedElements = elements.Count;
-        BlueToBePaintedElements = elements.Count;
-        GreenToBePaintedElements = elements.Count;
-
         var paintTasks = new List<Task>();
 
         foreach (var element in elements) paintTasks.Add(PaintElementInAllColorsAsync(element));
@@ -128,28 +122,24 @@ public class PaintingService
         {
             IncrementPaintingCounter(color);
 
-            // Update status to Painting
-            element.Status = "Painting";
-
-            // Simulate a delay for the painting operation
-            await Task.Delay(duration);
+            await Task.Delay(duration); // Simulate painting delay
 
             switch (color)
             {
                 case "Red":
                     element.IsRedPainted = true;
-                    RedToBePaintedElements--;
-                    RedToBePaintedChanged?.Invoke(RedToBePaintedElements);
+                    RedPaintedElements++;
+                    RedToBePaintedChanged?.Invoke(RedPaintedElements);
                     break;
                 case "Blue":
                     element.IsBluePainted = true;
-                    BlueToBePaintedElements--;
-                    BlueToBePaintedChanged?.Invoke(BlueToBePaintedElements);
+                    BluePaintedElements++;
+                    BlueToBePaintedChanged?.Invoke(BluePaintedElements);
                     break;
                 case "Green":
                     element.IsGreenPainted = true;
-                    GreenToBePaintedElements--;
-                    GreenToBePaintedChanged?.Invoke(GreenToBePaintedElements);
+                    GreenPaintedElements++;
+                    GreenToBePaintedChanged?.Invoke(GreenPaintedElements);
                     break;
             }
         }
